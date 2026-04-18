@@ -102,8 +102,18 @@ class RhythmRoastApp {
     this.currentSongParams = song;
     
     // シナリオパターンの抽選（1〜3）
-    const patterns = this.scenarioData[song.key];
-    this.currentDialogues = patterns[Math.floor(Math.random() * patterns.length)];
+    const patternIndex = Math.floor(Math.random() * patterns.length);
+    this.currentDialogues = patterns[patternIndex];
+
+    // パターン番号に応じて背景時間を切り替え（0: 昼, 1: 夕方, 2: 夜）
+    const bgApp = document.getElementById('app');
+    if (patternIndex === 0) {
+      bgApp.style.backgroundImage = "url('assets/images/bg_cafe.jpg')";
+    } else if (patternIndex === 1) {
+      bgApp.style.backgroundImage = "url('assets/images/bg_cafe_evening.jpg')";
+    } else {
+      bgApp.style.backgroundImage = "url('assets/images/bg_cafe_night.jpg')";
+    }
 
     document.getElementById('loading-msg').innerText = 'Loading Song...';
     this.player.createFromSongUrl(song.url);
