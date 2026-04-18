@@ -252,3 +252,78 @@ button:disabled {
   background: var(--accent-color);
   transition: width 0.1s linear;
 }
+
+/* Jukebox UI */
+#jukebox-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+#jukebox-btn:hover {
+  background: rgba(56, 189, 248, 0.6);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  justify-content: center;
+  align-items: center;
+}
+.modal.active {
+  display: flex !important;
+}
+.modal .glass-panel {
+  max-width: 90%;
+  width: 400px;
+  padding: 30px;
+  background: rgba(15, 23, 42, 0.85);
+}
+.modal h2 {
+  margin: 0 0 15px 0;
+  color: var(--accent-color);
+  font-size: 1.5rem;
+}
+#song-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  max-height: 50vh;
+  overflow-y: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+#song-list li {
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  color: #e2e8f0;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+  z-index: 1000;
+}
+#song-list li:hover {
+  background: rgba(56, 189, 248, 0.3);
+  color: white;
+}
+.close-btn {
+  background: transparent;
+  color: #cdd6e4;
+  border: 1px solid #cdd6e4;
+  width: 100%;
+}
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}

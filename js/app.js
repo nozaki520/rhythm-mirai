@@ -190,6 +190,11 @@ class RhythmRoastApp {
       this.showMessage(this.currentDialogues.enter);
       this.physics.start();
       
+      // 入店時に音楽を自動再生
+      if (this.player && this.player.video) {
+        this.player.requestPlay();
+      }
+
       // 入店時はspecialなイメージにしてみる
       this.changeMikuState('special');
       setTimeout(() => this.changeMikuState('normal'), 3000);
@@ -241,6 +246,11 @@ class RhythmRoastApp {
             this.player.requestStop();
           }
           this.loadSong(key);
+          
+          // 曲変更後に自動再生をリクエストする（TextAliveの仕様上、少し待機してから発火させるのが安全）
+          setTimeout(() => {
+            if (this.player) this.player.requestPlay();
+          }, 600);
         });
       });
     }
