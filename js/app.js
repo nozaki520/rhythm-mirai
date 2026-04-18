@@ -102,6 +102,7 @@ class RhythmRoastApp {
     this.currentSongParams = song;
     
     // シナリオパターンの抽選（1〜3）
+    const patterns = this.scenarioData[song.key];
     const patternIndex = Math.floor(Math.random() * patterns.length);
     this.currentDialogues = patterns[patternIndex];
 
