@@ -63,7 +63,7 @@ class RhythmRoastApp {
       onAppReady: (app) => {
         console.log('onAppReady', app);
         if (!app.managed) {
-          this.loadRandomSong();
+          this.loadSong();
         }
       },
       onVideoReady: (v) => {
@@ -97,8 +97,13 @@ class RhythmRoastApp {
     this.bindEvents();
   }
 
-  loadRandomSong() {
-    const song = SONGS[Math.floor(Math.random() * SONGS.length)];
+  loadSong(forcedKey = null) {
+    let song;
+    if (forcedKey) {
+      song = SONGS.find(s => s.key === forcedKey) || SONGS[0];
+    } else {
+      song = SONGS[Math.floor(Math.random() * SONGS.length)];
+    }
     this.currentSongParams = song;
     
     // シナリオパターンの抽選（1〜3）
@@ -205,9 +210,40 @@ class RhythmRoastApp {
     this.stopBtn.addEventListener('click', () => {
       if (this.player) {
         this.player.requestStop();
-        this.loadRandomSong();
+        this.loadSong();
       }
     });
+
+    // ジュークボックス関連ボタン
+    const jukeboxBtn = document.getElementById('jukebox-btn');
+    const jukeboxModal = document.getElementById('jukebox-modal');
+    const closeJukeboxBtn = document.getElementById('close-jukebox-btn');
+    const songListItems = document.querySelectorAll('#song-list li');
+
+    if (jukeboxBtn) {
+      jukeboxBtn.addEventListener('click', () => {
+        jukeboxModal.classList.add('active');
+      });
+    }
+
+    if (closeJukeboxBtn) {
+      closeJukeboxBtn.addEventListener('click', () => {
+        jukeboxModal.classList.remove('active');
+      });
+    }
+
+    if (songListItems) {
+      songListItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const key = item.getAttribute('data-key');
+          jukeboxModal.classList.remove('active');
+          if (this.player && this.player.isPlaying) {
+            this.player.requestStop();
+          }
+          this.loadSong(key);
+        });
+      });
+    }
   }
 
   onTimeUpdate(position) {
