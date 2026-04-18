@@ -1,0 +1,245 @@
+:root {
+  --bg-color: #1a1a2e;
+  --text-primary: #e2e8f0;
+  --accent-color: #38bdf8;
+  --glass-bg: rgba(15, 23, 42, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 500px; /* PCでもスマホサイズ相当に制限 */
+  margin: 0 auto;
+  background-image: url('../assets/images/bg_cafe.jpg');
+  background-size: cover;
+  background-position: center;
+  background-color: #475569; /* フォールバックのグレー背景 */
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+/* スプラッシュスクリーン */
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  z-index: 10;
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--glass-shadow);
+  width: 80%;
+  max-width: 340px;
+}
+
+.glass-panel h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.glass-panel h1 span {
+  color: var(--accent-color);
+}
+
+button {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.2s, transform 0.1s;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+button:hover {
+  background: #0284c7;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:disabled {
+  background: #64748b;
+  cursor: not-allowed;
+}
+
+/* カフェメイン画面 */
+#physics-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2; /* 背景より上で、キャラより下 */
+  pointer-events: none;
+}
+
+/* キャラ立ち絵領域 */
+#miku-container {
+  position: absolute;
+  bottom: 250px; /* メッセージウィンドウと被らないよう確保 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 400px;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+#miku-img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+}
+
+/* 画像がない場合のプレースホルダー（青い矩形） */
+#miku-img.placeholder {
+  width: 200px;
+  height: 350px;
+  background-color: var(--accent-color);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+}
+
+/* メッセージウィンドウ */
+#message-window {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 450px;
+  height: 140px;
+  z-index: 4;
+  padding: 15px 20px;
+  border-radius: 12px;
+  background-image: url('../assets/images/msg_window.png');
+  background-size: cover;
+  background-color: var(--glass-bg); /* フォールバック */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+#msg-name {
+  font-weight: 600;
+  color: var(--accent-color);
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+#msg-text {
+  flex-grow: 1;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #f8fafc;
+  overflow-y: auto;
+}
+
+/* プレイヤーコントロール */
+#player-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(15, 23, 42, 0.9);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 15px;
+}
+
+.song-info {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.controls button {
+  margin: 0;
+  padding: 5px 15px;
+  font-size: 0.9rem;
+}
+
+.controls button#stop-btn {
+  background: #475569;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #334155;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+#progress-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--accent-color);
+  transition: width 0.1s linear;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>#39C5BB Cafe Time</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <!-- TextAlive App API -->
+  <script src="https://unpkg.com/textalive-app-api/dist/index.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- ローディング/エラー画面 -->
+    <div id="splash-screen" class="screen active">
+      <div class="glass-panel">
+        <h1>#39C5BB <span>Cafe Time</span></h1>
+        <p id="loading-msg">Initializing...</p>
+        <button id="start-btn" style="display: none;">ENTER CAFE</button>
+      </div>
+    </div>
+
+    <!-- カフェ画面 -->
+    <div id="cafe-screen" class="screen">
+      <!-- 物理演算用Canvas -->
+      <canvas id="physics-canvas"></canvas>
+      
+      <!-- キャラ立ち絵領域 -->
+      <div id="miku-container">
+        <!-- img srcはJSで制御。無ければplaceholder CSSが当たる仕様 -->
+        <img id="miku-img" src="" alt="Miku" class="placeholder">
+      </div>
+
+      <!-- メッセージウィンドウ -->
+      <div id="message-window" class="glass-window">
+        <div id="msg-name">初音ミク</div>
+        <div id="msg-text">……</div>
+      </div>
+
+      <!-- プレイヤーコントロール用UI -->
+      <div id="player-controls">
+        <div class="song-info">
+          <span id="current-song-title">-</span> by <span id="current-song-artist">-</span>
+        </div>
+        <div class="controls">
+          <button id="play-btn">▶</button>
+          <button id="pause-btn">⏸</button>
+          <button id="stop-btn">🔄 新しい曲にする</button>
+        </div>
+        <div class="progress-bar">
+          <div id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/physics.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
