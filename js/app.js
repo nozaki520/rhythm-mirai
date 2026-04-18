@@ -159,6 +159,7 @@ class RhythmRoastApp {
   bindEvents() {
     this.startBtn.addEventListener('click', () => {
       document.getElementById('splash-screen').classList.remove('active');
+      document.getElementById('cafe-screen').classList.add('active');
       this.showMessage(this.currentDialogues.enter);
       this.physics.start();
       
