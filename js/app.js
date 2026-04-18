@@ -119,8 +119,11 @@ class RhythmRoastApp {
     document.getElementById('loading-msg').innerText = 'Loading Song...';
     this.player.createFromSongUrl(song.url);
     this.physics.clear();
+
+    // 4種類のミク画像からランダムで1つ選択
+    this.currentMikuId = Math.floor(Math.random() * 4) + 1;
     
-    // 画像初期化（パスがない場合はCSSで代替表示）
+    // 画像初期化
     this.changeMikuState('normal');
 
     // フォールバック制御：TextAlive APIがURL判定でブロックして進まない場合、4秒後に強制的にUIを開放する
@@ -136,12 +139,19 @@ class RhythmRoastApp {
   }
 
   changeMikuState(state) {
-    // assets/images/miku/[songKey]/[state].png
-    if (!this.currentSongParams) return;
-    const path = `assets/images/miku/${this.currentSongParams.key}/${state}.png`;
+    if (!this.currentSongParams || !this.currentMikuId) return;
+    
+    // 曲依存ではなく、ランダムで選ばれた 1.png 〜 4.png を使用する
+    const path = `assets/images/miku/${this.currentMikuId}.png`;
     this.mikuImg.src = path;
     
-    // 画像読み込みエラー時はプレースホルダCSSを適用し続けるための処理
+    // サビや特別な状態のときは bounce クラスをつけてCSSアニメーションさせるようにする
+    if (state === 'smile' || state === 'special') {
+      this.mikuImg.classList.add('bounce');
+    } else {
+      this.mikuImg.classList.remove('bounce');
+    }
+
     this.mikuImg.onerror = () => {
       this.mikuImg.classList.add('placeholder');
       this.mikuImg.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; // 1px transparent
@@ -152,6 +162,7 @@ class RhythmRoastApp {
       }
     };
   }
+
 
   showMessage(text) {
     this.msgText.innerHTML = '';
